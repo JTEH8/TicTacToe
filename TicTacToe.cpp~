@@ -2,20 +2,26 @@
 
 using namespace std;
 
-struct Student{
-  char name[10];
-  int id;
-  float gpa;
+struct Player{
+  char move[2];
+  int winCount;
 };
 
 
 int main()
 {
-  Student george;
-  cin >> george.name ;
-  george.id = 1234;
-  george.gpa = 3.0;
-  cout << george.name << " ID:" << george.id << " GPA:";
-  cout << george.gpa << endl;
+  char board [4][4] = {{' ', 1 , 2, 3}, {'a',' ', ' ', ' '}, {'b', ' ', ' ', ' '},{\
+'c', ' ', ' ', ' '}};
+  Player X;
+  Player O;
+  X.winCount = 0;
+  O.winCount = 0;
+  cout << "Welcome to TicTacToe. \n There will be two players, and X will have the \
+first move." << endl;
+          cout<< "Enter a valid move e.g 'a1' " << endl;
+          cin >> X.move;
+          cin >> O.move;
 }
+
+
 
