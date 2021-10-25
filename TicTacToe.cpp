@@ -7,21 +7,25 @@ bool checkWin(struct board* b);
 void endGame(struct board* b);
 void printBoard(struct board* b);
 void playAgain(struct board* b);
+bool checkTie(struct board* b);
 struct board{
-  char board[3][3];
+  int board[3][3];
   bool currentPlayer;
   bool Winning;
   int xWins;
   int oWins;
   bool playing;
   bool running;
+  bool Tie;
 };
 
 int main()
 {
   struct board myBoard;
+  memset(myBoard.board, 0 ,9);
   myBoard.playing = true;
   myBoard.running = true;
+  myBoard.Tie = false;
   char temp[2];
   int column = 0;
   int row = 0;
@@ -31,23 +35,21 @@ int main()
   myBoard.Winning = true;
   myBoard.xWins = 0;
   myBoard.oWins = 0;
-  memset(myBoard.board, 0,9);
   while(myBoard.playing == true){
-myBoard.currentPlayer = true;
-cout << "Welcome to TicTacToe. \n There will be two players, and X will have the first move." << endl;
+  myBoard.currentPlayer = true;
+  cout << "Welcome to TicTacToe. \n There will be two players, and X will have the first move." << endl;
           cout<< "Player X please enter a valid move e.g 'a1' " << endl;	  
 	  printBoard(&myBoard);
-	  while(myBoard.running = true){
+	  while(myBoard.running == true){
 	  if(myBoard.currentPlayer == true)
 	    {
 	      cout << "Player X, enter your move:" << endl;
 	      cin.get(temp, 3, '\n');
 	      cin.get();
-	      cout << temp << endl;
       column = temp[1]-'0';
-      cout << temp[1] << endl;
-      if(1 <= column <= 3){
-      if('a' <= temp[0] <='c'){
+      if(('a' == temp[0]) || (temp[0] == 'b') || (temp[0] == 'c')){
+        cout << column << endl;
+    if((1 == column)|| (column == 2) || (column == 3)){
 	 if(temp[0] == 'a'){
 	   row = 0;
 	 }
@@ -56,74 +58,79 @@ cout << "Welcome to TicTacToe. \n There will be two players, and X will have the
 	 }
 	 if(temp[0] == 'c'){
 	   row = 2;
-	 }
-	 if(myBoard.board[row][column-1] == '\0'||' '){
- cout << "This is the X: " << column-1 << endl;
- cout << "This is the Y: " << row << endl;
-      myBoard.board[row][column-1] = 'X';
+   }
+   cout << row << endl;
+   cout << myBoard.board[row][column-1] << endl;
+   if((myBoard.board[row][column-1] != 1) || (myBoard.board[row][column-1] != 2)){
+         cout << 'c' << endl;
+      myBoard.board[row][column-1] = 1;
       myBoard.Winning = checkWin(&myBoard);
       endGame(&myBoard);
+      myBoard.Tie = checkTie(&myBoard);
       playAgain(&myBoard);
       myBoard.currentPlayer = false;
       printBoard(&myBoard);
+   }
+    else{
+     cout << "Please enter a valid input. e.g a1";
+   }
 	 }
-	 }
-      else{
-	  cout << "Please enter a valid move e.g. a1" << endl;
-	}
+   else{
+     cout << "Please enter a valid input. e.g a1";
+   }
       }
-      else{
+       else{
 	  cout << "Please enter a valid move e.g. a1" << endl;
-	}
 	    }
      if(myBoard.currentPlayer == false)
 	    {
 	      cout << "Player O, enter your move:" << endl;
 	      cin.get(temp2, 3, '\n');
 	      cin.get();
-      column2 = temp2[1]-'0';
-      if(1 <= column2 <= 3){
-      if('a' <= temp2[0] <='c'){
+        column2 = temp2[1]-'0';
+        if(('a' == temp2[0]) || (temp2[0] == 'b') || (temp2[0] == 'c')){
+    if((1 == column2)|| (2 == 2) || (column2 == 3)){
  if(temp2[0] == 'a'){
    row2 = 0;
  }
- if(temp[0] == 'b'){
+ if(temp2[0] == 'b'){
    row2 = 1;
  }
- if(temp[0] == 'c'){
+ if(temp2[0] == 'c'){
    row2 = 2;
  }
- if(myBoard.board[row2][column2-1] == '\0'||' '){
-      myBoard.board[row2][column2-1] = 'O';
+ //if(myBoard.board[row2][column2-1] == 0){
+      myBoard.board[row2][column2-1] = 2;
       printBoard(&myBoard);
       myBoard.Winning = checkWin(&myBoard);
       endGame(&myBoard);
+      myBoard.Tie = checkTie(&myBoard);
       playAgain(&myBoard);
       myBoard.currentPlayer = true;
- }
- else{
+ //}
+ /*else{
 	  cout << "Please enter a valid move e.g. a1" << endl;
-	}
+      }*/
       }
-      else{
-	cout << "Please enter a valid move (e.g a1, b2, c3, etc)." << endl;
-      }
-      }
-      else{
+       else{
 	  cout << "Please enter a valid move e.g. a1" << endl;
+      }
 	}
-	    }
-	  }
+   else{
+	  cout << "Please enter a valid move e.g. a1" << endl;
+      }
   }
 }
-
+}
+}
+}
 bool checkWin(struct board* b){
-  char player = ' ';
-  if(b->currentPlayer == false){
-    char player = 'O';
-  }
+  int player = 0;
   if(b->currentPlayer == true){
-    char player = 'X';
+    player = 1;
+  }
+  if(b->currentPlayer == false){
+    player = 2;
   }
  if (b->board[0][0] == player && b->board[0][1] == player && b-> board[0][2] == player){
     return true;
@@ -159,15 +166,30 @@ bool checkWin(struct board* b){
   return false;
 }
 
-void printBoard(struct board* b){
-cout << "  1  2  3" << endl;
-  for(int m = 0; m < 3; m++){
-    cout << (char)('a' + (char)m);
-    for(int n = 0; n < 3; n++){
-      cout<<' '<< b->board[m][n] << ' ';
+void printBoard(struct board* b) {
+  //struct game newboard;
+  int num = 1;
+  cout << "  1 2 3" << endl;
+  for (int i = 0; i < 3; i++) {
+    cout << '\0' << endl;
+    cout << (char)('a' + (char)(num-1));
+    num++;
+    for (int j=0; j < 3; j++) {
+      cout << ' ';
+       if (b->board[i][j] == 0) {
+         cout << ' ';
+       }
+       if (b->board[i][j] == 1) {
+         cout << 'X';
+       }
+       if (b->board[i][j] == 2) {
+         cout << 'O';
+       }
+      //cout << newboard.board[i][j] << endl;
     }
-    cout << endl;
+    cout << '\0' << endl;
   }
+
 }
 
 void endGame(struct board* b){
@@ -175,13 +197,13 @@ void endGame(struct board* b){
   if(b->Winning == true){
   if(b->currentPlayer == true){
     b->xWins++;
-    cout << "Player X" << " has won!" << endl;
+    cout << "Player X has won!" << endl;
     cout << "They have won " << b->xWins << " times." << endl; 
     b->running = false;
   }
   if(b->currentPlayer == false){
     b->oWins++;
-    cout << "Player O" << " has won!" << endl;
+    cout << "Player O has won!" << endl;
     cout << "They have won " << b->oWins << " times." << endl;
     b->running = false;
   }  
@@ -190,18 +212,41 @@ void endGame(struct board* b){
 
 void playAgain(struct board* b){
   char redo[1];
-  memset(redo,0 , 1);
+  memset(redo, 0, 1);
   if(b->Winning == true){
     cout << "Do you want to play again? (y or n)" << endl;
     cin.get(redo,1);
     cin.get();
-    if(redo == "y"){
+    if(redo[0] == 'y'){
       b->playing = true;
       b->running = true;
     }
-    if(redo == "n"){
+    if(redo[0] == 'n'){
+      b->playing = false;
+    }
+  }
+    if(b->Tie == true){
+    cout << "That's a tie!" << endl;
+    cout << "Do you want to play again? (y or n)" << endl;
+    cin.get(redo,1);
+    cin.get();
+    if(redo[0] == 'y'){
+      b->playing = true;
+      b->running = true;
+    }
+    if(redo[0] == 'n'){
       b->playing = false;
     }
   }
 }
 
+bool checkTie(struct board* b){
+  for(int m = 0; m < 3; m++){
+    for(int n = 0; n < 3; n++ ){
+      if(b->board[m][n] == 0){
+        return false;
+      }
+    }
+    }
+    return true;    
+  }
