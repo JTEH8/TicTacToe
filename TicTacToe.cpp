@@ -1,14 +1,14 @@
-
+//A two player game of Tic-Tac-Toe through the console.
 #include <iostream>
 #include <cstring>
 using namespace std;
-const bool PlayerX = true;
-const bool PlayerO = false;
+//Methods
 bool checkWin(struct board* b);
 void endGame(struct board* b);
 void printBoard(struct board* b);
 void playAgain(struct board* b);
 bool checkTie(struct board* b);
+//Struct for board, which stores, the board, # of wins, as well as booleans.
 struct board{
   int board[3][3];
   bool currentPlayer;
@@ -21,8 +21,10 @@ struct board{
   bool over;
 };
 
+//Main method
 int main()
 {
+//Creatiing Variables
   struct board myBoard;
   myBoard.playing = true;
   myBoard.running = true;
@@ -39,6 +41,7 @@ int main()
   myBoard.oWins = 0;
   while(myBoard.playing == true){
   myBoard.currentPlayer = true;
+ //Prompt text
   cout << "Welcome to TicTacToe. \n There will be two players, and X will have the first move." << endl;
           cout<< "Player X please enter a valid move e.g 'a1' " << endl;	  
 	  for(int a = 0; a < 3; a++){
@@ -49,7 +52,9 @@ int main()
     myBoard.running = true;
     myBoard.over = false;
 	  printBoard(&myBoard);
+	  //Switches between two players
 	  while(myBoard.running == true){
+	//X's turn
 	  if(myBoard.currentPlayer == true)
 	    {
         column = 0;
@@ -58,6 +63,7 @@ int main()
 	      cin.get(temp, 3, '\n');
 	      cin.get();
       column = temp[1]-'0';
+		  //Checking valid input
       if(('a' == temp[0]) || (temp[0] == 'b') || (temp[0] == 'c')){
         cout << column << endl;
     if((1 == column)|| (column == 2) || (column == 3)){
@@ -70,8 +76,7 @@ int main()
 	 if(temp[0] == 'c'){
 	   row = 2;
    }
-   cout << row << endl;
-   cout << myBoard.board[row][column-1] << endl;
+	    //If the space is empty
    if(myBoard.board[row][column] == 0){
       myBoard.board[row][column-1] = 1;
         printBoard(&myBoard);
@@ -79,11 +84,11 @@ int main()
       endGame(&myBoard);
       myBoard.Tie = checkTie(&myBoard);
       playAgain(&myBoard);
+	   //If the game restarts
       if(myBoard.over == true){
       break;
       }
       myBoard.currentPlayer = false;
-     
    }
     else{
      cout << "Please enter a valid input. e.g a1";
@@ -96,14 +101,16 @@ int main()
        else{
 	  cout << "Please enter a valid move e.g. a1" << endl;
 	    }
+	//O's Turn
      if(myBoard.currentPlayer == false)
 	    {
-        column = 0;
-        row = 0;
+        column2 = 0;
+        row2 = 0;
 	      cout << "Player O, enter your move:" << endl;
 	      cin.get(temp2, 3, '\n');
 	      cin.get();
         column2 = temp2[1]-'0';
+	     //Checking valid input
         if(('a' == temp2[0]) || (temp2[0] == 'b') || (temp2[0] == 'c')){
     if((1 == column2)|| (2 == 2) || (column2 == 3)){
  if(temp2[0] == 'a'){
@@ -115,6 +122,7 @@ int main()
  if(temp2[0] == 'c'){
    row2 = 2;
  }
+	    //If the space is empty
  if(myBoard.board[row2][column2-1] == 0){
       myBoard.board[row2][column2-1] = 2;
       printBoard(&myBoard);
@@ -122,6 +130,7 @@ int main()
       endGame(&myBoard);
       myBoard.Tie = checkTie(&myBoard);
       playAgain(&myBoard);
+	 //If game needs to restart
       if(myBoard.over == true){
       break;
       }
@@ -141,9 +150,9 @@ int main()
   }
 }
 }  
-
 }
 }
+//Checks all win conditions (similar to Java code)
 bool checkWin(struct board* b){
   int player = 0;
   if(b->currentPlayer == true){
@@ -185,15 +194,8 @@ bool checkWin(struct board* b){
   }
   return false;
 }
-
+//Prints the board one line at a time. (Help from Nihal Parthasarathy and Ehan Masud) 
 void printBoard(struct board* b) {
-  for(int m = 0; m < 3; m++){
-    for(int n = 0; n < 3; n++){
-      cout << ' ' << b->board[m][n] << ' ';
-    }
-    cout << endl;
-  }
-  //struct game newboard;
   int num = 1;
   cout << "  1 2 3" << endl;
   for (int i = 0; i < 3; i++) {
@@ -214,9 +216,8 @@ void printBoard(struct board* b) {
     }
     cout << '\0' << endl;
   }
-
 }
-
+//Ending the game and adding to win count
 void endGame(struct board* b){
   int winCount = 0;
   if(b->Winning == true){
@@ -234,7 +235,7 @@ void endGame(struct board* b){
   }  
   }
 }
-
+//Asks the user to play again, and breaks out of while loop to go back to start.
 void playAgain(struct board* b){
   char redo[2];
   memset(redo, 0, 2);
@@ -258,6 +259,7 @@ void playAgain(struct board* b){
       exit(0);
     }
   }
+//What happens when it's a tie
     if(b->Tie == true){
     cout << "That's a tie!" << endl;
     cout << "Do you want to play again? (y or n)" << endl;
@@ -276,7 +278,7 @@ void playAgain(struct board* b){
     }
   }
 }
-
+//Checks if it's a tie (again, help from Nihal Parthasarathy)
 bool checkTie(struct board* b){
   for(int m = 0; m < 3; m++){
     for(int n = 0; n < 3; n++ ){
