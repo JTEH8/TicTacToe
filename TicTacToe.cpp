@@ -77,7 +77,7 @@ int main()
 	   row = 2;
    }
 	    //If the space is empty
-   if(myBoard.board[row][column] == 0){
+   if(myBoard.board[row][column-1] == 0){
       myBoard.board[row][column-1] = 1;
         printBoard(&myBoard);
       myBoard.Winning = checkWin(&myBoard);
